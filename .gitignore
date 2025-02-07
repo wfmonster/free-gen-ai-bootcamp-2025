@@ -1,6 +1,7 @@
 
 # Mac specific ignore
 .DS_Store
+/lang_portal
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
