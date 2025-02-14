@@ -22,9 +22,11 @@ def run_migrations():
         
         print("Migrations completed successfully")
     except Exception as e:
+        # if migration fails, print the error and rollback
         print(f"Error running migrations: {str(e)}")
         conn.rollback()
     finally:
+        # always close the connection
         conn.close()
 
 if __name__ == '__main__':

@@ -2,10 +2,24 @@ from flask import request, jsonify, g
 from flask_cors import cross_origin
 import json
 
+
 def load(app):
+  """
+  Load the routes for the groups resource.
+  The routes included in this file are:
+  - GET /groups
+  - GET /groups/:id
+  - GET /groups/:id/words
+  - GET /groups/:id/words/raw
+  - GET /groups/:id/study_sessions
+  """
+
   @app.route('/groups', methods=['GET'])
   @cross_origin()
   def get_groups():
+    """
+    Get a paginated list of groups with sorting and pagination.
+    """
     try:
       cursor = app.db.cursor()
 
@@ -58,9 +72,13 @@ def load(app):
     except Exception as e:
       return jsonify({"error": str(e)}), 500
 
+
   @app.route('/groups/<int:id>', methods=['GET'])
   @cross_origin()
   def get_group(id):
+    """
+    Get details of a specific group by ID.
+    """
     try:
       cursor = app.db.cursor()
 
@@ -83,9 +101,13 @@ def load(app):
     except Exception as e:
       return jsonify({"error": str(e)}), 500
 
+
   @app.route('/groups/<int:id>/words', methods=['GET'])
   @cross_origin()
   def get_group_words(id):
+    """
+    Get a paginated list of words for a specific group with sorting and pagination.
+    """
     try:
       cursor = app.db.cursor()
       
@@ -155,11 +177,55 @@ def load(app):
     except Exception as e:
       return jsonify({"error": str(e)}), 500
 
-  # todo GET /groups/:id/words/raw
+
+  # TODO:
+  # [x] - GET /groups/:id/words/raw
+  @app.route('/groups/<int:id>/words/raw', methods=['GET'])
+  @cross_origin()
+  def get_group_words_raw(id):
+    """
+    Get all words for a specific group without pagination or sorting.
+    """
+    try:
+      cursor = app.db.cursor()
+
+      # Query to fetch all words in the group without pagination
+      cursor.execute('''
+        SELECT w.id, w.kanji, w.romaji, w.english,
+               COALESCE(wr.correct_count, 0) as correct_count,
+               COALESCE(wr.wrong_count, 0) as wrong_count
+        FROM words w
+        JOIN word_groups wg ON w.id = wg.word_id
+        LEFT JOIN word_reviews wr ON w.id = wr.word_id
+        WHERE wg.group_id = ?
+      ''', (id,))
+      
+      words = cursor.fetchall()
+
+      # Format the response
+      words_data = []
+      for word in words:
+        words_data.append({
+          "id": word["id"],
+          "kanji": word["kanji"],
+          "romaji": word["romaji"],
+          "english": word["english"],
+          "correct_count": word["correct_count"],
+          "wrong_count": word["wrong_count"]
+        })
+
+      return jsonify(words_data)
+      
+    except Exception as e:
+      return jsonify({"error": str(e)}), 500
+
 
   @app.route('/groups/<int:id>/study_sessions', methods=['GET'])
   @cross_origin()
   def get_group_study_sessions(id):
+    """
+    Get a paginated list of study sessions for a specific group with sorting and pagination.
+    """
     try:
       cursor = app.db.cursor()
       
