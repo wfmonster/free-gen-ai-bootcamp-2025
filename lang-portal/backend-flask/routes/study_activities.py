@@ -3,9 +3,21 @@ from flask_cors import cross_origin
 import math
 
 def load(app):
+    """
+    Load the routes for the study activities resource.
+    The routes included in this file are:
+    - GET /api/study-activities
+    - GET /api/study-activities/:id
+    - GET /api/study-activities/:id/sessions
+    - GET /api/study-activities/:id/launch
+    """
+
     @app.route('/api/study-activities', methods=['GET'])
     @cross_origin()
-    def get_study_activities():
+    def get_study_activities() -> list[dict]:
+        """
+        Get all study activities.
+        """
         cursor = app.db.cursor()
         cursor.execute('SELECT id, name, url, preview_url FROM study_activities')
         activities = cursor.fetchall()
@@ -19,7 +31,10 @@ def load(app):
 
     @app.route('/api/study-activities/<int:id>', methods=['GET'])
     @cross_origin()
-    def get_study_activity(id):
+    def get_study_activity(id: int) -> dict:
+        """
+        Get a study activity by id.
+        """
         cursor = app.db.cursor()
         cursor.execute('SELECT id, name, url, preview_url FROM study_activities WHERE id = ?', (id,))
         activity = cursor.fetchone()
@@ -36,7 +51,10 @@ def load(app):
 
     @app.route('/api/study-activities/<int:id>/sessions', methods=['GET'])
     @cross_origin()
-    def get_study_activity_sessions(id):
+    def get_study_activity_sessions(id: int) -> dict:
+        """
+        Get all sessions for a study activity.
+        """
         cursor = app.db.cursor()
         
         # Verify activity exists
@@ -98,7 +116,10 @@ def load(app):
 
     @app.route('/api/study-activities/<int:id>/launch', methods=['GET'])
     @cross_origin()
-    def get_study_activity_launch_data(id):
+    def get_study_activity_launch_data(id: int) -> dict:
+        """
+        Get the launch data for a study activity.
+        """
         cursor = app.db.cursor()
         
         # Get activity details

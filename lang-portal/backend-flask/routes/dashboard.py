@@ -3,6 +3,13 @@ from flask_cors import cross_origin
 from datetime import datetime, timedelta
 
 def load(app):
+    """
+    Load the routes for the dashboard resource.
+    The routes included in this file are:
+    - GET /dashboard/recent-session
+    - GET /dashboard/stats
+    """
+
     @app.route('/dashboard/recent-session', methods=['GET'])
     @cross_origin()
     def get_recent_session():

@@ -13,6 +13,7 @@ def load(app):
     """
     try:
       cursor = app.db.cursor()
+
       # Get request data
       data = request.get_json()
       
@@ -134,7 +135,7 @@ def load(app):
 
   @app.route('/api/study-sessions/<id>', methods=['GET'])
   @cross_origin()
-  def get_study_session(id):
+  def get_study_session(id: int) -> dict:
     try:
       cursor = app.db.cursor()
       
@@ -223,17 +224,72 @@ def load(app):
   @cross_origin()
   def review_study_session(id):
     try:
-      cursor = app.db.cursor()
-      # TODO 
-      
+        cursor = app.db.cursor()
+        
+        # Verify study session exists
+        cursor.execute('SELECT id FROM study_sessions WHERE id = ?', (id,))
+        if not cursor.fetchone():
+            return jsonify({"error": "Study session not found"}), 404
+            
+        # Get request data
+        data = request.get_json()
+        if not data or 'reviews' not in data:
+            return jsonify({"error": "Missing reviews data"}), 400
+            
+        reviews = data['reviews']
+        if not isinstance(reviews, list):
+            return jsonify({"error": "Reviews must be an array"}), 400
+            
+        # Begin transaction
+        cursor.execute('BEGIN TRANSACTION')
+        
+        try:
+            # Insert each review
+            for review in reviews:
+                if 'word_id' not in review or 'correct' not in review:
+                    raise ValueError("Each review must have word_id and correct fields")
+                    
+                # Verify word exists
+                cursor.execute('SELECT id FROM words WHERE id = ?', (review['word_id'],))
+                if not cursor.fetchone():
+                    raise ValueError(f"Word with id {review['word_id']} not found")
+                    
+                # Insert review
+                cursor.execute('''
+                    INSERT INTO word_review_items 
+                    (word_id, study_session_id, correct, created_at)
+                    VALUES (?, ?, ?, datetime('now'))
+                ''', (
+                    review['word_id'],
+                    id,
+                    1 if review['correct'] else 0
+                ))
+            
+            # Commit transaction
+            app.db.commit()
+            
+            return jsonify({
+                "message": "Reviews added successfully",
+                "study_session_id": id,
+                "reviews_added": len(reviews)
+            }), 201
+            
+        except Exception as e:
+            # Rollback transaction on error
+            app.db.rollback()
+            raise e
+
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
     except Exception as e:
-      return jsonify({"error": str(e)}), 500  
-      
-  
+        return jsonify({"error": str(e)}), 500
 
   @app.route('/api/study-sessions/reset', methods=['POST'])
   @cross_origin()
   def reset_study_sessions():
+    """
+    Reset the study sessions.
+    """
     try:
       cursor = app.db.cursor()
       
