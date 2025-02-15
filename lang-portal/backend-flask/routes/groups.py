@@ -180,42 +180,50 @@ def load(app):
 
   # TODO:
   # [x] - GET /groups/:id/words/raw
-  @app.route('/groups/<int:id>/words/raw', methods=['GET'])
+  @app.route('/api/groups/<int:id>/words/raw', methods=['GET'])
   @cross_origin()
-  def get_group_words_raw(id):
+  def get_group_words_raw(id) -> list[dict]:
     """
     Get all words for a specific group without pagination or sorting.
     """
     try:
       cursor = app.db.cursor()
 
-      # Query to fetch all words in the group without pagination
+      # check that the group exists
+      cursor.execute('SELECT name FROM groups WHERE id = ?', (id,))
+      group = cursor.fetchone()
+      if not group:
+        return jsonify({"error": "Group not found"}), 404
+
+      # SQL query to fetch words along with group information
       cursor.execute('''
-        SELECT w.id, w.kanji, w.romaji, w.english,
-               COALESCE(wr.correct_count, 0) as correct_count,
-               COALESCE(wr.wrong_count, 0) as wrong_count
-        FROM words w
-        JOIN word_groups wg ON w.id = wg.word_id
-        LEFT JOIN word_reviews wr ON w.id = wr.word_id
-        WHERE wg.group_id = ?
+        SELECT g.id as group_id, g.name as group_name, w.*
+        FROM groups g
+        JOIN word_groups wg ON g.id = wg.group_id
+        JOIN words w ON w.id = wg.word_id
+        WHERE g.id = ?;
       ''', (id,))
       
-      words = cursor.fetchall()
-
-      # Format the response
-      words_data = []
-      for word in words:
-        words_data.append({
-          "id": word["id"],
-          "kanji": word["kanji"],
-          "romaji": word["romaji"],
-          "english": word["english"],
-          "correct_count": word["correct_count"],
-          "wrong_count": word["wrong_count"]
-        })
-
-      return jsonify(words_data)
+      data = cursor.fetchall()
       
+      # Format the response
+      result = {
+        "group_id": id,
+        "group_name": data[0]["group_name"] if data else group["name"],
+        "words": []
+      }
+      
+      for row in data:
+        word = {
+          "id": row["id"],
+          "kanji": row["kanji"],
+          "romaji": row["romaji"],
+          "english": row["english"],
+          "parts": json.loads(row["parts"])  # Deserialize 'parts' field
+        }
+        result["words"].append(word)
+      
+      return jsonify(result)
     except Exception as e:
       return jsonify({"error": str(e)}), 500
 
