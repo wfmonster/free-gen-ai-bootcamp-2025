@@ -1,12 +1,17 @@
 from flask import request, jsonify, g
-from flask_cors import cross_origin
+from flask_cors import cross_origin, CORS
 import json
 
 def load(app):
+    # Add this line to enable CORS for all routes
   # Endpoint: GET /words with pagination (50 words per page)
   @app.route('/words', methods=['GET'])
   @cross_origin()
   def get_words():
+    """
+    Get all words with pagination and sorting
+    test: curl -v http://127.0.0.1:5000/words
+    """
     try:
       cursor = app.db.cursor()
 
@@ -74,6 +79,10 @@ def load(app):
   @app.route('/words/<int:word_id>', methods=['GET'])
   @cross_origin()
   def get_word(word_id):
+    """
+    Get a single word with its details
+    test: curl -v http://127.0.0.1:5000/words/1
+    """
     try:
       cursor = app.db.cursor()
       

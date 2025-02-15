@@ -5,7 +5,7 @@ import math
 
 def load(app):
 	# TODO:  /study_sessions POST
-	@app.route('/api/study-sessions', methods=['POST'])
+	@app.route('/study-sessions', methods=['POST'])
 	@cross_origin()
 	def create_study_session() -> dict:
 		"""
@@ -51,7 +51,6 @@ def load(app):
 
 		except Exception as e:
 			return jsonify({"error": str(e)}), 500
-
 
 	@app.route('/api/study-sessions', methods=['GET'])
 	@cross_origin()
@@ -199,7 +198,7 @@ def load(app):
 			return jsonify({"error": str(e)}), 500
 
 	# todo POST /study_sessions/:id/review
-	@app.route('/api/study-sessions/<id>/review', methods=['POST'])
+	@app.route('/study-sessions/<id>/review', methods=['POST'])
 	@cross_origin()
 	def review_study_session(id: int) -> dict:
 		try:
