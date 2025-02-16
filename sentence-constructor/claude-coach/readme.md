@@ -15,6 +15,7 @@ I wanted to try to use a gamified approach that provides the following:
 - Context
 - Slash Commands for different actions 
 - XP points to reward the users progress. 
+- Instructions for each mode 
 
 ### Intial Attempt
 I developed a new prompt that is a gameified version of the previous claude prompt with different modes and xp points. 
