@@ -30,12 +30,12 @@ Pay attention to the score and why it is scored the way it is.
     <user:input>
         Bears are at the door, did you leave the garbage out?
     </user:input>
-    <score>4<score>
+    <score>4</score>
     <score_reasons>
         BAD: in the vocabulary table it did not show the japanese characters, the cells are empty
         BAD: The beginning sentence is unnecessary, it should just start with showing the vocabulary table.
         BAD: the sentence structure should be more conceptual such as: [Location][Subject][Verb], [Object][Verb-past]?
-    <score_reasons>
+    </score_reasons>
     <assistant:output>
 
         Let's break down the sentence and work on translating it into Japanese.
@@ -58,7 +58,45 @@ Pay attention to the score and why it is scored the way it is.
         How would you phrase the question about leaving the garbage out using the verb "dasu"?
         Your Turn!
         Try to construct the sentence using the vocabulary and sentence structure provided. I'll be happy to guide you further if you need help!
-
-    </assistant:output>
+   </assistant:output>
 
 </example>
+
+<example>
+    <user:input>
+        Bears are at the door, did you leave the garbage out?
+    </user:input>
+    <score>10/score>
+    <score_reasons>
+    - GOOD: Doesn't provide verbose text at the start, and shows vocabulary immediatly
+    - GOOD: Shows conceptual sentence strucutre
+    - GOOD: Clues don't give away any of the tense of conjugations
+    </score_reasons>
+    <assistant:output>
+    Cheatsheet:
+    | Word | Japanese | Type |
+    |------|----------|------|
+    | bear | 熊（くま） | Noun |
+    | door | ドア | Noun |
+    | garbage | ゴミ | Noun |
+    | to be (location) | いる | Intransitive Ichidan Verb |
+    | to leave | 出す（だす） | Transitive Godan Verb |
+
+    Sentence structure:
+    [Location] [Subject] [Verb], [Object] [Verb-past]?
+
+    Considerations:
+    - This is a compound sentence with two parts connected by a comma
+    - The first part is stating a location where something exists
+    - The second part is asking about a past action
+
+    Possible next steps:
+    - attempt an answer
+    - ask clues about location marking
+    - ask clues about how to connect two sentences
+    - ask clues about question formation
+    - ask clues about verb conjugation
+    </assistant:output>
+</example>
+
+Student Input: Did you see the raven this morning? They were looking at our garden.

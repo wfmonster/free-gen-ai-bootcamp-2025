@@ -24,7 +24,7 @@ An AI-Powered Assistant of the developer’s choice must be used eg:
 - Mistral AI https://mistral.ai/
 - *Ollama + Open WebUI https://openwebui.com/
 - *LibreChat https://www.librechat.ai/
--Leon https://github.com/leon-ai/leon
+- Leon https://github.com/leon-ai/leon
 
 
 ## Meta Powered AI-Assistant Guide
@@ -40,7 +40,7 @@ Limitations
 
 
 
-## Prompting Guides
+## Prompting Guides (Meta)
 
 https://www.promptingguide.ai/techniques/meta-prompting 
 
