@@ -19,6 +19,7 @@ def load(app):
   def get_groups():
     """
     Get a paginated list of groups with sorting and pagination.
+    curl -X GET "http://127.0.0.1:5000/groups?page=1&sort_by=name&order=asc"
     """
     try:
       cursor = app.db.cursor()
@@ -78,6 +79,7 @@ def load(app):
   def get_group(id):
     """
     Get details of a specific group by ID.
+    curl -X GET "http://127.0.0.1:5000/groups/1"
     """
     try:
       cursor = app.db.cursor()
@@ -107,6 +109,8 @@ def load(app):
   def get_group_words(id):
     """
     Get a paginated list of words for a specific group with sorting and pagination.
+    curl -X GET "http://127.0.0.1:5000/groups/1/words?page=1&sort_by=kanji&order=asc"
+
     """
     try:
       cursor = app.db.cursor()
@@ -185,6 +189,7 @@ def load(app):
   def get_group_words_raw(id) -> list[dict]:
     """
     Get all words for a specific group without pagination or sorting.
+    curl -X GET "http://127.0.0.1:5000/api/groups/1/words/raw"
     """
     try:
       cursor = app.db.cursor()
@@ -233,6 +238,7 @@ def load(app):
   def get_group_study_sessions(id):
     """
     Get a paginated list of study sessions for a specific group with sorting and pagination.
+    curl -X GET "http://127.0.0.1:5000/groups/1/study_sessions?page=1&sort_by=startTime&order=desc"
     """
     try:
       cursor = app.db.cursor()

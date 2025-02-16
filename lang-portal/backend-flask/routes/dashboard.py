@@ -13,6 +13,11 @@ def load(app):
     @app.route('/dashboard/recent-session', methods=['GET'])
     @cross_origin()
     def get_recent_session():
+        """
+        Get the most recent study session with activity name and results
+        curl -X GET "http://127.0.0.1:5000/dashboard/recent-session"
+		Note: REturns null if there are no study sessions.
+        """
         try:
             cursor = app.db.cursor()
             
@@ -53,6 +58,10 @@ def load(app):
     @app.route('/dashboard/stats', methods=['GET'])
     @cross_origin()
     def get_study_stats():
+        """
+        Get the study stats for the dashboard
+        curl -X GET "http://127.0.0.1:5000/dashboard/stats"
+        """
         try:
             cursor = app.db.cursor()
             

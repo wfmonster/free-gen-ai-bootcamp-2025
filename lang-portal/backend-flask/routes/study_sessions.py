@@ -4,12 +4,21 @@ from datetime import datetime
 import math
 
 def load(app):
-	# TODO:  /study_sessions POST
+	# TODO: 
+	# [x] /study_sessions POST
 	@app.route('/study-sessions', methods=['POST'])
 	@cross_origin()
 	def create_study_session() -> dict:
 		"""
 		Create a new study session for a group. 
+		curl -X POST "http://127.0.0.1:5000/study-sessions" \
+		-H "Content-Type: application/json" \
+		-d '{"group_id": 1, "study_activity_id": 1}'
+
+		# testing activity that doesn't exist yet. Should return : study activity not found
+		curl -X POST "http://127.0.0.1:5000/study-sessions" \ 
+		-H "Content-Type: application/json" \
+		-d '{"group_id": 1, "study_activity_id": 2}'
 		"""
 		try:
 			# Get request data
@@ -55,6 +64,10 @@ def load(app):
 	@app.route('/api/study-sessions', methods=['GET'])
 	@cross_origin()
 	def get_study_sessions():
+		"""
+		Get all study sessions with pagination and sorting.
+		curl -X GET "http://127.0.0.1:5000/api/study-sessions?page=1&per_page=10"
+		"""
 		try:
 			cursor = app.db.cursor()
 			
@@ -114,6 +127,10 @@ def load(app):
 	@app.route('/api/study-sessions/<id>', methods=['GET'])
 	@cross_origin()
 	def get_study_session(id: int) -> dict:
+		"""
+		Get a study session by id.
+		test: curl -X GET "http://127.0.0.1:5000/api/study-sessions/1"
+		"""
 		try:
 			cursor = app.db.cursor()
 			
@@ -197,10 +214,21 @@ def load(app):
 		except Exception as e:
 			return jsonify({"error": str(e)}), 500
 
-	# todo POST /study_sessions/:id/review
+	# TODO:
+	#  POST /study_sessions/:id/review
 	@app.route('/study-sessions/<id>/review', methods=['POST'])
 	@cross_origin()
 	def review_study_session(id: int) -> dict:
+		"""
+		Review a study session.
+		curl -X POST "http://127.0.0.1:5000/study-sessions/1/review" \
+		-H "Content-Type: application/json" \
+		-d '{"word_id": 1, "correct": true}'
+
+		example return:
+		{ "message": "Reviews added successfully" }
+		
+		"""
 		try:
 			cursor = app.db.cursor()
 			data = request.get_json()
@@ -278,6 +306,7 @@ def load(app):
 	def reset_study_sessions():
 		"""
 		Reset the study sessions.
+		curl -X POST "http://127.0.0.1:5000/api/study-sessions/reset"
 		"""
 		try:
 			cursor = app.db.cursor()

@@ -3,14 +3,20 @@ from flask_cors import cross_origin, CORS
 import json
 
 def load(app):
-    # Add this line to enable CORS for all routes
-  # Endpoint: GET /words with pagination (50 words per page)
+  """
+  Load the routes for the words resource.
+  The routes included in this file are:
+  - GET /words
+  - GET /words/:id
+  """
+  
   @app.route('/words', methods=['GET'])
   @cross_origin()
   def get_words():
     """
-    Get all words with pagination and sorting
+    Get all words with pagination and sorting, 100 per page.
     test: curl -v http://127.0.0.1:5000/words
+    curl -X GET "http://127.0.0.1:5000/words?page=1&sort_by=kanji&order=asc"
     """
     try:
       cursor = app.db.cursor()
@@ -81,7 +87,7 @@ def load(app):
   def get_word(word_id):
     """
     Get a single word with its details
-    test: curl -v http://127.0.0.1:5000/words/1
+    test: curl -X GET "http://127.0.0.1:5000/words/1"
     """
     try:
       cursor = app.db.cursor()

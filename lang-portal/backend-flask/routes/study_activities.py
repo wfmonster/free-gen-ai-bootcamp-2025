@@ -17,6 +17,7 @@ def load(app):
     def get_study_activities() -> list[dict]:
         """
         Get all study activities.
+        test: curl -X GET "http://127.0.0.1:5000/api/study-activities"
         """
         cursor = app.db.cursor()
         cursor.execute('SELECT id, name, url, preview_url FROM study_activities')
@@ -34,6 +35,7 @@ def load(app):
     def get_study_activity(id: int) -> dict:
         """
         Get a study activity by id.
+        test: curl -X GET "http://127.0.0.1:5000/api/study-activities/1"
         """
         cursor = app.db.cursor()
         cursor.execute('SELECT id, name, url, preview_url FROM study_activities WHERE id = ?', (id,))
@@ -54,6 +56,7 @@ def load(app):
     def get_study_activity_sessions(id: int) -> dict:
         """
         Get all sessions for a study activity.
+        test: curl -X GET "http://127.0.0.1:5000/api/study-activities/1/sessions?page=1&per_page=10"
         """
         cursor = app.db.cursor()
         
@@ -119,6 +122,7 @@ def load(app):
     def get_study_activity_launch_data(id: int) -> dict:
         """
         Get the launch data for a study activity.
+        curl -X GET "http://127.0.0.1:5000/api/study-activities/1/launch"
         """
         cursor = app.db.cursor()
         
