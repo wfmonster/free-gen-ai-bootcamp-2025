@@ -1,6 +1,10 @@
 
 # Week 1 - Level 100 -Sentence Constructor
 
+State Diagram:
+![Sentence Constructor State Diagram](sentence-constructor-state-diagram.png)
+
+
 ### Meta AI
 
 https://github.com/wfmonster/free-gen-ai-bootcamp-2025/tree/main/sentence-constructor/meta-ai
