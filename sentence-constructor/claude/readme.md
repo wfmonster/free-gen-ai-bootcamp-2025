@@ -19,7 +19,8 @@ https://www.promptingguide.ai/course
 ### Initial Customisation
 
 Changing the language of the prompt to use more specific student and teacher language and changing clues state to teacher feedback.
-Added specific examples of the output structure to help the model understand the expected output.
+Added specific examples of the output structure to help the model understand the expected output.Using a one-shot/fewshot approach. 
 Included specific wording about using the socratic method or inquiry based learning. 
+
 
  

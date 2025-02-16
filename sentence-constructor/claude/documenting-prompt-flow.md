@@ -4,7 +4,7 @@
 - Added prompt and all files. ( sentence-structure-examples.xml, considerations-examples.xml, japanese-teaching-tests.md, examples.xml)
 - Did not use a project. 
 - I noted during the usage of this prompt that it put the current state at the top of each response which I find useful. 
-- The output seems to be more consistent with itself but still has a tendency to give away parts of the answer.
+- The output seems to be more consistent with itself but still has a tendency to give away parts of the answer but did not provide the final answer directly when I asked for it. 
 - I ran out of free messages, so decided to pay for pro at then end.
 
 ## Initial LLM Response 
