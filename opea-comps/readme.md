@@ -99,3 +99,70 @@ I know it is interfacing with the docker container because docker ps shows that 
 
 ![Docker PS Output](docker-pos-output.png)
 
+
+For the LLM service which can do text geenration, it suggests that it will only work with TGI/vLLM and all you need to do is have it running. Does TGI and vLLM have a standarized API? or is there code to detect which one is running? Do we really have to use a Xeon or Guadi processor?
+
+
+
+### Mega Service 
+
+You can install the comps directly
+`pip install opea-comps`
+
+Docs
+https://opea-project.github.io/latest/GenAIComps/README.html
+https://opea-project.github.io/latest/community/rfcs/24-05-17-OPEA-001-Deployment-Design.html
+
+
+
+### Technical Uncertainty
+I am unsure how to configure the docker images to run the mega service. 
+There is an exmaple yaml file but the documentation says it has to be converted to a 
+docker-compose.yaml file to be used with docker. IF i have this and it is pulling remote services do I even need to build my own locally? 
+
+I am unsure how to test that the mega services chain is actually working. The app runs with all four megaservices and the curl command executes but the content is returning as "No response content available" so empty and I am unsure about how to debug it. 
+
+I think it is hitting the local llama model which is running on the ollama docker container on port 9000. 
+I am getting a status 200 when sending the put request but the response is still empty, so it is unknown if we have configured the mega service to work with ollama correctly. 
+
+## Test commands. 
+```bash
+export OTEL_SDK_DISABLED=true # disable tracing 
+export host_ip=$(ipconfig getifaddr en0)
+curl -X POST http://localhost:8000/v1/example-service \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "llama3.2:1b",
+    "messages": "Hello, how are you?"
+  }' \
+  -o response.json
+```
+
+```bash
+export host_ip=$(ipconfig getifaddr en0)
+export OTEL_SDK_DISABLED=true # disable tracing 
+curl -X POST http://0.0.0.0:8000/v1/example-rag-service \
+-H "Content-Type: application/json" \
+-d '{
+"messages": [
+    {
+    "role": "user",
+    "content": "Hello, how are you?"
+    }
+],
+"model": "llama3.2:1b",
+"max_tokens": 100,
+"temperature": 0.7
+}'
+```
+
+### Example Outputs
+
+Output from the curl command:
+![Mega Service Curl Command](mega-service/mega-service-curl.png)
+
+Output from the ollama server running:
+![Ollam server Post](mega-service/ollama-server-post-received.png)
+
+Output from the OPEA mega service running:
+![OPEA Mega Service Running](mega-service/opea-megaservice-run-post200.png)
