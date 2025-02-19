@@ -102,6 +102,15 @@ I know it is interfacing with the docker container because docker ps shows that 
 
 For the LLM service which can do text geenration, it suggests that it will only work with TGI/vLLM and all you need to do is have it running. Does TGI and vLLM have a standarized API? or is there code to detect which one is running? Do we really have to use a Xeon or Guadi processor?
 
+###  claude-app.py 
+Runs a 'mega service' with ollama and it works! I asked claude to generate the simplest opea mega service to use with an ollama server.  Although I think its using a direct iterface with the ollama server on localhost:11434 instead of the docker container, but I am not sure. 
+
+![Claude App Output](mega-service/claude-app-output.png)
+
+
+### For claude-guardrails.py
+It runs but the port 3000 connection gets refused because there isn't actually a service running on that port. 
+I attempted to add the guardrails service to the claude-app in the claude-guardrails.py file, but I think what I am understanding is that for each service you have to have something to connect it too that is running on that port like ollama is for the llm service. You would have to do that for ever service you orchestrate. 
 
 
 ### Mega Service 
